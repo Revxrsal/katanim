@@ -1,4 +1,6 @@
-    plugins {
+import org.jreleaser.model.Active
+
+plugins {
     id("java")
     id("java-library")
     id("maven-publish")
@@ -60,7 +62,25 @@ publishing {
 
     repositories {
         maven {
-            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+            url = layout.buildDirectory.dir("staging").get().asFile.toURI()
+        }
+    }
+}
+jreleaser {
+    signing {
+        active = Active.ALWAYS
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                create("sonatype") {
+                    active = Active.ALWAYS
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    stagingRepositories.add("${rootProject.layout.buildDirectory}/staging")
+                    stagingRepository("build/staging")
+                }
+            }
         }
     }
 }
