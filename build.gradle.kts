@@ -7,16 +7,8 @@ plugins {
     id("org.jreleaser") version "1.13.1"
 }
 
-group = "manim"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-
-}
+group = "io.github.revxrsal"
+version = "1.0.0-SNAPSHOT"
 
 java {
     withJavadocJar()
@@ -29,43 +21,46 @@ java {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = project.name
 
             from(components["java"])
+            groupId = "io.github.revxrsal"
+            artifactId = "katanim"
 
             pom {
-                name.set("katanim")
-                description.set("A powerful, extendable, flexible yet simple to use commands annotation framework.")
-                url.set("https://github.com/Revxrsal/katanim")
+                name.set("Katanim")
+                description.set("A mathematics animation library in Kotlin")
                 inceptionYear.set("2024")
+                url.set("https://github.com/Revxrsal/katanim/")
                 licenses {
                     license {
                         name.set("MIT")
                         url.set("https://mit-license.org/")
+                        distribution.set("https://mit-license.org/")
                     }
                 }
                 developers {
                     developer {
-                        id.set("Revxrsal")
+                        id.set("revxrsal")
                         name.set("Revxrsal")
+                        url.set("https://github.com/Revxrsal/")
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://github.com/Revxrsal/katanim.git")
-                    developerConnection.set("scm:git:ssh://github.com/Revxrsal/katanim.git")
-                    url.set("https://github.com/Revxrsal/katanim")
+                    url.set("https://github.com/Revxrsal/katanim/")
+                    connection.set("scm:git:git://github.com/Revxrsal/katanim.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/Revxrsal/katanim.git")
                 }
             }
         }
     }
-
     repositories {
         maven {
-            url = layout.buildDirectory.dir("staging").get().asFile.toURI()
+            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
         }
     }
 }
+
+
 jreleaser {
     signing {
         active = Active.ALWAYS
@@ -73,12 +68,14 @@ jreleaser {
     }
     deploy {
         maven {
-            mavenCentral {
-                create("sonatype") {
+            nexus2 {
+                create("maven-central") {
                     active = Active.ALWAYS
-                    url = "https://central.sonatype.com/api/v1/publisher"
-                    stagingRepositories.add("${rootProject.layout.buildDirectory}/staging")
-                    stagingRepository("build/staging")
+                    url = "https://s01.oss.sonatype.org/service/local"
+                    snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                    closeRepository = true
+                    releaseRepository = true
+                    stagingRepository("build/staging-deploy")
                 }
             }
         }
