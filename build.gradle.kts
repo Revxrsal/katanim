@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "io.github.revxrsal"
-version = "1.0.0"
+version = "1.0.1"
 
 java {
     withJavadocJar()
@@ -72,7 +72,6 @@ jreleaser {
                 create("maven-central") {
                     active = Active.ALWAYS
                     url = "https://s01.oss.sonatype.org/service/local"
-                    snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
                     closeRepository = true
                     releaseRepository = true
                     stagingRepository("build/staging-deploy")
