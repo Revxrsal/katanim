@@ -5,10 +5,10 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
-group = "io.github.revxrsal"
-version = "0.0.0.1"
-
 allprojects {
+
+    group = "io.github.revxrsal"
+    version = "0.0.0.1"
 
     apply(plugin = "java")
     apply(plugin = "com.vanniktech.maven.publish")
