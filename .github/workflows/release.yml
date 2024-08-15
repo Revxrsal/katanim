@@ -1,8 +1,8 @@
 name: Build
 
 on:
-  push:
-    branches: [ master ]
+  release:
+    types: [ created ]
 
 jobs:
   build:
@@ -41,3 +41,5 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
