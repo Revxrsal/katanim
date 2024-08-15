@@ -1,82 +1,59 @@
-import org.jreleaser.model.Active
+import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     id("java")
-    id("java-library")
-    id("maven-publish")
-    id("org.jreleaser") version "1.13.1"
+    id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
 group = "io.github.revxrsal"
-version = "1.0.3"
+version = "1.0.4"
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+allprojects {
+
+    apply(plugin = "java")
+    apply(plugin = "com.vanniktech.maven.publish")
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
-}
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
+    mavenPublishing {
+        coordinates(
+            groupId = group as String,
+            artifactId = name,
+            version = version as String
+        )
 
-            from(components["java"])
-            groupId = "io.github.revxrsal"
-            artifactId = "katanim"
-
-            pom {
-                name.set("Katanim")
-                description.set("A mathematics animation library in Kotlin")
-                inceptionYear.set("2024")
+        pom {
+            name.set("Katanim")
+            description.set("A mathematics animation library in Kotlin")
+            inceptionYear.set("2024")
+            url.set("https://github.com/Revxrsal/katanim/")
+            licenses {
+                license {
+                    name.set("MIT")
+                    url.set("https://mit-license.org/")
+                    distribution.set("https://mit-license.org/")
+                }
+            }
+            developers {
+                developer {
+                    id.set("revxrsal")
+                    name.set("Revxrsal")
+                    url.set("https://github.com/Revxrsal/")
+                }
+            }
+            scm {
                 url.set("https://github.com/Revxrsal/katanim/")
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://mit-license.org/")
-                        distribution.set("https://mit-license.org/")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("revxrsal")
-                        name.set("Revxrsal")
-                        url.set("https://github.com/Revxrsal/")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/Revxrsal/katanim/")
-                    connection.set("scm:git:git://github.com/Revxrsal/katanim.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/Revxrsal/katanim.git")
-                }
+                connection.set("scm:git:git://github.com/Revxrsal/katanim.git")
+                developerConnection.set("scm:git:ssh://git@github.com/Revxrsal/katanim.git")
             }
         }
-    }
-    repositories {
-        maven {
-            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-        }
-    }
-}
 
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-jreleaser {
-    signing {
-        active = Active.ALWAYS
-        armored = true
-    }
-    deploy {
-        maven {
-            nexus2 {
-                create("maven-central") {
-                    active = Active.ALWAYS
-                    url = "https://s01.oss.sonatype.org/service/local"
-                    closeRepository = true
-                    releaseRepository = true
-                    stagingRepository("build/staging-deploy")
-                }
-            }
-        }
+        signAllPublications()
     }
 }

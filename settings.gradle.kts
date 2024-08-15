@@ -4,5 +4,5 @@ plugins {
 
 rootProject.name = "katanim"
 
-include("core", "lwjgl")
+//include("core", "lwjgl")
 
