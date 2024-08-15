@@ -5,7 +5,7 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
-allprojects {
+subprojects {
 
     group = "io.github.revxrsal"
     version = "0.0.0.1"
@@ -22,7 +22,7 @@ allprojects {
     mavenPublishing {
         coordinates(
             groupId = group as String,
-            artifactId = name,
+            artifactId = "katanim.$name",
             version = version as String
         )
 
