@@ -25,7 +25,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Gradle Build
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
 
       - name: Gradle Publish
         run: ./gradlew publish
